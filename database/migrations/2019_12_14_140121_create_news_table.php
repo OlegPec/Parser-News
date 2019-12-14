@@ -19,7 +19,7 @@ class CreateNewsTable extends Migration
             $table->string('preview_description');
             $table->string('preview_image')->nullable();
             $table->text('detail_description')->nullable();
-            $table->jsonb('detail_images')->nullable();
+            $table->json('detail_images')->nullable();
             $table->smallInteger('news_channel_id');
             $table->string('news_url'); //адрес новости
             $table->timestamp('public_date');
