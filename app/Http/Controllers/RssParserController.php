@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class RssParserController extends Controller
 {
-    public function handle(){
+    public function getNews(){
         //        $url = 'https://www.nasa.gov/rss/dyn/educationnews.rss';
 //        $rss = simplexml_load_file($url);
 //        $test = levenshtein('Карл у Клары украл караллы', '', 0, 1, 1);

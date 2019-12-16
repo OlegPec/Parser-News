@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
                   ->everyMinute();*/
         /* $schedule->command('runtask')
                   ->everyMinute();*/
-        $schedule->command(RssParserController::class)->everyFiveMinutes();
+        $schedule->command('App\Http\Controllers\RssParserController@getNews')->everyFiveMinutes();
     }
 
     /**
