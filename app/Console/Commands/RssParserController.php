@@ -10,7 +10,7 @@ use Image;
 class RssParserController extends Command
 {
 
-    protected $signature = 'RssParser';
+    protected $signature = 'rssParser';
 
     /**
      * The console command description.
