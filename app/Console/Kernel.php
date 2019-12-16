@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Http\Controllers\RssParserController;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -28,6 +29,9 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
         /* $schedule->command('runtask')
                   ->everyMinute();*/
+        /* $schedule->command('runtask')
+                  ->everyMinute();*/
+        $schedule->command(RssParserController::class)->everyFiveMinutes();
     }
 
     /**

@@ -21,6 +21,7 @@ class CreateNewsTable extends Migration
             $table->text('detail_description')->nullable();
             $table->json('detail_images')->nullable();
             $table->smallInteger('news_channel_id');
+            $table->string('category')->nullable();
             $table->string('news_url'); //адрес новости
             $table->timestamp('public_date');
 //            $table->timestamp('expiration_date'); //дата окончания показа
