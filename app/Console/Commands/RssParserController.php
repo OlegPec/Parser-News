@@ -52,9 +52,14 @@ class RssParserController extends Command
             case 2:
                 $rss = simplexml_load_file($rssChannels[$key], 'SimpleXMLElement', LIBXML_NOCDATA);
                 foreach ($rss->channel->item as $item){
+                    if(preg_match('/.(png|jpg|jpeg)$/', $item->enclosure->attributes()->url)) {
+                        dd($item->enclosure->attributes()->url);
+                    }
                     if(!in_array($item->title, $news)){
                         $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key);
-//                        dd('new');
+                        if($item->enclosure->attributes()->url){
+
+                        }
                     }
 //                    dd('old');
                 }
@@ -75,7 +80,24 @@ class RssParserController extends Command
         ]);
     }
 
-    private function CreateImage(){
+    private function CreateImage($url, $text){
+        $path = 'images/news';
+        $hex = array(
+            '#cd221b',
+            '#0da00c',
+            '#0c1a91',
+            '#cc702c',
+            '#752984',
+            '#60646d',
+        );
+        $img = Image::canvas(626, 1200, $hex[array_rand($hex, 1)]);
 
+        $img->text($text, 20, 600, function($font) {
+            $font->file(public_path('/fonts/Roboto.ttf'));
+            $font->size('50');
+            $font->color('#fdf6e3');
+            $font->align('center');
+            $font->valign('center');
+        });
     }
 }

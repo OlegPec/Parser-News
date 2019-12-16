@@ -12,4 +12,4 @@
 */
 
 Route::get('/', 'HomeController@index');
-Route::get('/get-news', 'RssParserController@getNews');
+Route::get('/get-news', '\App\Console\Commands\RssParserController@handle');
