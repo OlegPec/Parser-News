@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\News;
 use App\Models\NewsChannel;
 use Illuminate\Console\Command;
+use Image;
 
 class RssParserController extends Command
 {
@@ -72,5 +73,9 @@ class RssParserController extends Command
             'news_url' => $news_url,
             'public_date' => $public_date
         ]);
+    }
+
+    private function CreateImage(){
+
     }
 }
