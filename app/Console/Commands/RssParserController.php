@@ -70,7 +70,7 @@ class RssParserController extends Command
     }
 
     private function CreateNews($title, $preview_description, $news_url, $public_date, $news_channel_id, $category = null, $preview_image = null){
-        $preview_description_short = mb_strimwidth($preview_description, 0, 250, "...");
+        $preview_description_short = mb_strimwidth($preview_description, 0, 150, "...");
         News::create([
             'title' => $title,
             'preview_description' => $preview_description_short,
