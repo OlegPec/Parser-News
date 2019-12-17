@@ -52,6 +52,7 @@ class RssParserController extends Command
             case 2:
                 $rss = simplexml_load_file($rssChannels[$key], 'SimpleXMLElement', LIBXML_NOCDATA);
                 foreach ($rss->channel->item as $item){
+                    dd('dgdg');
                     if(preg_match('/.(png|jpg|jpeg)$/', $item->enclosure->attributes()->url)) {
                         dd($item->enclosure->attributes()->url);
                     }
@@ -69,10 +70,10 @@ class RssParserController extends Command
     }
 
     private function CreateNews($title, $preview_description, $news_url, $public_date, $news_channel_id, $category = null, $preview_image = null){
-        $preview_description = mb_strimwidth($preview_description, 0, 250, "...");
+        $preview_description_short = mb_strimwidth($preview_description, 0, 250, "...");
         News::create([
             'title' => $title,
-            'preview_description' => $preview_description,
+            'preview_description' => $preview_description_short,
             'preview_image' => $preview_image,
             'category' => $category,
             'news_channel_id' => $news_channel_id,
