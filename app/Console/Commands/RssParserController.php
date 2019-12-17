@@ -41,10 +41,10 @@ class RssParserController extends Command
         switch ($key){
             case 1:
                 $rss = simplexml_load_file($rssChannels[$key]);
-                foreach ($rss->channel->item as $item){
+                foreach ($rss->channel->item as $item){;
                     if(!in_array($item->title, $news)){
-                        $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key);
-//                        dd('new');
+                        $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, $item->category);
+                        dd('new');
                     }
 //                    dd('old');
                 }
@@ -68,12 +68,13 @@ class RssParserController extends Command
 //        $rss = simplexml_load_file($url);
     }
 
-    private function CreateNews($title, $preview_description, $news_url, $public_date, $news_channel_id, $preview_image = null){
-        $preview_description = mb_strimwidth($preview_description, 0, 252, "...");
+    private function CreateNews($title, $preview_description, $news_url, $public_date, $news_channel_id, $category = null, $preview_image = null){
+        $preview_description = mb_strimwidth($preview_description, 0, 250, "...");
         News::create([
             'title' => $title,
             'preview_description' => $preview_description,
             'preview_image' => $preview_image,
+            'category' => $category,
             'news_channel_id' => $news_channel_id,
             'news_url' => $news_url,
             'public_date' => $public_date

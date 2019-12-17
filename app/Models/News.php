@@ -9,7 +9,7 @@ class News extends Model
 {
     use UsesUuid;
 
-    protected $fillable = ['title', 'preview_description', 'preview_image', 'news_channel_id', 'news_url', 'public_date'];
+    protected $fillable = ['title', 'preview_description', 'preview_image', 'news_channel_id', 'category', 'news_url', 'public_date'];
 
     public function news_channel(){
         return $this->belongsTo('App\Models\NewsChannel', 'news_channel_id', 'id');
