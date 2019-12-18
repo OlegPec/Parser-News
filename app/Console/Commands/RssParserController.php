@@ -86,18 +86,42 @@ class RssParserController extends Command
     }
 
     private function CreateImage($url, $text){
+
+        $width       = 626;
+        $height      = 1200;
+        $center_x    = $width / 2;
+        $center_y    = $height / 2;
+        $max_len     = 40;//60 for 30 size;//36;
+        $font_size   = 50;
+        $font_height = 30;//20;
+
         $path = 'images/news/';
         $hex = array(
-            '#cd221b',
+//            '#cd221b',
             '#0da00c',
             '#0c1a91',
             '#cc702c',
             '#752984',
             '#60646d',
         );
-        $img = Image::canvas(626, 1200, $hex[array_rand($hex, 1)]);
 
-        $fontSize = 50;
+        $lines = explode("\n", wordwrap($text, $max_len));
+        $ys     = $center_y - ((count($lines) - 1) * $font_height);
+        $img   = Image::canvas($width, $height, $hex[array_rand($hex, 1)]);
+        if($url) {
+            $imgIns = Image::make($url);
+            $imgIns->fit(626, 872);
+//            $imgIns->crop(626, 872, 0, 0);
+//            $img->resize(626, 872);
+            //626x872
+            $imgIns->blur(10);
+            $img->insert($imgIns, 'center');
+        }
+
+
+//        $img = Image::canvas(626, 1200, $hex[array_rand($hex, 1)]);
+
+//        $fontSize = 50;
         $fontPath = public_path('/fonts/Roboto.ttf');
 
 
@@ -108,13 +132,36 @@ class RssParserController extends Command
 //            $fontPath
 //        );
 
-        $img->text($textLines, 20, 600, function($font) use($fontSize, $fontPath){
+        foreach ($lines as $line)
+        {
+            for( $x = -2; $x <= 2; $x++ ) {
+                for( $y = -2; $y <= 2; $y++ ) {
+                    $img->text($line, $center_x + $x, $ys + $y, function($font) use ($font_size, $fontPath) {
+                        $font->file($fontPath);
+                        $font->size($font_size);
+                        $font->color('#ffffff'); // Glow color
+                        $font->align('center');
+                        $font->valign('center');
+                    });
+                }
+            }
+            $img->text($line, $center_x, $ys, function($font) use ($font_size, $fontPath){
+                $font->file($fontPath);
+                $font->size($font_size);
+                $font->color('#000000');
+                $font->align('center');
+                $font->valign('center');
+            });
+
+            $ys += $font_height * 2;
+        }
+        /*$img->text($textLines, 20, 600, function($font) use($fontSize, $fontPath){
             $font->file($fontPath);
             $font->size($fontSize);
             $font->color('#fdf6e3');
             $font->align('center');
 //            $font->valign('center');
-        });
+        });*/
         $filename = md5(now()).'.png'; //Задаем имя картинке
         $img->save(public_path($path).$filename, 70);
         return $filename;
