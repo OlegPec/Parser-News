@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\News;
 use App\Models\NewsChannel;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Image;
 
 class RssParserController extends Command
@@ -33,7 +34,6 @@ class RssParserController extends Command
         //        $url = 'https://www.nasa.gov/rss/dyn/educationnews.rss';
 //        $rss = simplexml_load_file($url);
 //        $test = levenshtein('Карл у Клары украл караллы', '', 0, 1, 1);
-//        dd($test);
         $rssChannels = NewsChannel::all()->pluck('url', 'id'); //->sortBy('id')
         $news = News::all()->pluck('title')->toArray();
         $preview_image = null;
@@ -44,10 +44,12 @@ class RssParserController extends Command
                 $rss = simplexml_load_file($rssChannels[$key]);
                 foreach ($rss->channel->item as $item){;
                     if(!in_array($item->title, $news)){
-                        $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, $item->category);
+                        $preview_image = $this->CreateImage($item->title, $item->description);
+                        $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, $item->category, $preview_image);
 //                        dd('new');
+                    }else {
+                        dd('old');
                     }
-//                    dd('old');
                 }
                 break;
             case 2:
@@ -58,18 +60,21 @@ class RssParserController extends Command
                     if(!in_array($item->title, $news)){
                         if(preg_match('/.(png|jpg|jpeg)$/', $item->enclosure->attributes()->url)) {
                             $imgUrl = $item->enclosure->attributes()->url;
-                            $preview_image = $this->CreateImage($imgUrl, $item->title);
+                            $preview_image = $this->CreateImage($item->title, $item->description, $imgUrl);
+                        }else {
+                            $preview_image = $this->CreateImage($item->title, $item->description);
                         }
                         $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, null, $preview_image);
-                        if(preg_match('/.(png|jpg|jpeg)$/', $item->enclosure->attributes()->url)) {
+                        /*if(preg_match('/.(png|jpg|jpeg)$/', $item->enclosure->attributes()->url)) {
                             dd('ff');
-                        }
+                        }*/
                     }
 //                    dd('old');
                 }
                 break;
         }
 //        $rss = simplexml_load_file($url);
+        dd('dfgdfgh');
     }
 
     private function CreateNews($title, $preview_description, $news_url, $public_date, $news_channel_id, $category = null, $preview_image = null){
@@ -85,85 +90,75 @@ class RssParserController extends Command
         ]);
     }
 
-    private function CreateImage($url, $text){
+    private function CreateImage($title, $description, $url = null){
 
-        $width       = 626;
-        $height      = 1200;
-        $center_x    = $width / 2;
-        $center_y    = $height / 2;
-        $max_len     = 40;//60 for 30 size;//36;
-        $font_size   = 50;
-        $font_height = 30;//20;
+        $width_canvas        = 626;
+        $height_canvas       = 1200;
+        $position            = 100;
+        $margin              = 35;
+        $padding             = 15;
+        $width_img           = 596;
+        $height_img          = 300;
+        $max_len_title       = 65;
+        $font_size_title     = 30;
+        $font_height_title   = 20;//20;
+        $font_size_text      = 23;
+        $font_height_text    = 15;
+        $max_len_text        = 84;
+        $img_path = 'images/news/';
 
-        $path = 'images/news/';
-        $hex = array(
-//            '#cd221b',
-            '#0da00c',
-            '#0c1a91',
-            '#cc702c',
-            '#752984',
-            '#60646d',
-        );
+        $fontPathTitle = public_path('/fonts/Roboto-Bold.ttf');
+        $fontPathText = public_path('/fonts/Roboto.ttf');
 
-        $lines = explode("\n", wordwrap($text, $max_len));
-        $ys     = $center_y - ((count($lines) - 1) * $font_height);
-        $img   = Image::canvas($width, $height, $hex[array_rand($hex, 1)]);
-        if($url) {
-            $imgIns = Image::make($url);
-            $imgIns->fit(626, 872);
-//            $imgIns->crop(626, 872, 0, 0);
-//            $img->resize(626, 872);
-            //626x872
-            $imgIns->blur(10);
-            $img->insert($imgIns, 'center');
-        }
-
-
-//        $img = Image::canvas(626, 1200, $hex[array_rand($hex, 1)]);
-
-//        $fontSize = 50;
-        $fontPath = public_path('/fonts/Roboto.ttf');
-
-
-//        $textLines = $this->generateText(
-//            $text,
-//            700,
-//            $fontSize,
-//            $fontPath
-//        );
-
-        foreach ($lines as $line)
+        $img   = Image::canvas($width_canvas, $height_canvas, '#ffffff');
+        $lines_title = explode("\n", wordwrap($title, $max_len_title));
+//        $position = $start_position - ((count($lines) - 1) * $font_height);
+        foreach ($lines_title as $line)
         {
-            for( $x = -2; $x <= 2; $x++ ) {
-                for( $y = -2; $y <= 2; $y++ ) {
-                    $img->text($line, $center_x + $x, $ys + $y, function($font) use ($font_size, $fontPath) {
-                        $font->file($fontPath);
-                        $font->size($font_size);
-                        $font->color('#ffffff'); // Glow color
-                        $font->align('center');
-                        $font->valign('center');
-                    });
-                }
-            }
-            $img->text($line, $center_x, $ys, function($font) use ($font_size, $fontPath){
-                $font->file($fontPath);
-                $font->size($font_size);
+            $img->text($line, $padding, $position, function($font) use ($font_size_title, $fontPathTitle){
+                $font->file($fontPathTitle);
+                $font->size($font_size_title);
                 $font->color('#000000');
-                $font->align('center');
-                $font->valign('center');
+//                $font->align('center');
+//                $font->valign('center');
             });
-
-            $ys += $font_height * 2;
+            $position += $font_height_title * 2;
         }
-        /*$img->text($textLines, 20, 600, function($font) use($fontSize, $fontPath){
-            $font->file($fontPath);
-            $font->size($fontSize);
-            $font->color('#fdf6e3');
-            $font->align('center');
-//            $font->valign('center');
-        });*/
-        $filename = md5(now()).'.png'; //Задаем имя картинке
-        $img->save(public_path($path).$filename, 70);
+        $position -= $font_height_title * 2; //удаление последнего пробела заголовка
+        if($url) {
+            $position += $margin;
+            $imgIns = Image::make($url);
+//            $imgIns->fit(626, 872);
+//            $imgIns->crop(626, 872, 0, 0);
+            $imgIns->widen($width_img);
+            //626x872
+//            $imgIns->blur(10);
+            $img->insert($imgIns, null, $padding, $position); //insert(img, 'center', x, y);
+            $position += ($imgIns->height() + 20) + $margin;
+        }else{
+            $position = $position + $margin + 20;
+        }
+        $lines_description = explode("\n", wordwrap($description, $max_len_text));
+//        $position = $start_position - ((count($lines) - 1) * $font_height);
+        foreach ($lines_description as $line)
+        {
+            $img->text($line, $padding, $position, function($font) use ($font_size_text, $fontPathText){
+                $font->file($fontPathText);
+                $font->size($font_size_text);
+                $font->color('#000000');
+//                $font->align('center');
+//                $font->valign('center');
+            });
+            $position += $font_height_text * 2;
+        }
+        try {
+            $img_name = bin2hex(random_bytes(16));
+        } catch (\Exception $e) {
+            $img_name = Str::random(32);
+        }
+        $filename = md5($img_name).'.png'; //Задаем имя картинке
+        $img->save(public_path($img_path).$filename, 70);
+//        dd('dgdg');
         return $filename;
     }
 
