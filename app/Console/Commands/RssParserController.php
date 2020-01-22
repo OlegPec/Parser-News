@@ -30,64 +30,129 @@ class RssParserController extends Command
         parent::__construct();
     }
 
+
     public function handle(){
+//        mb_internal_encoding("UTF-8");
         //        $url = 'https://www.nasa.gov/rss/dyn/educationnews.rss';
 //        $rss = simplexml_load_file($url);
 //        $test = levenshtein('Карл у Клары украл караллы', '', 0, 1, 1);
+//        $text = '«Мерзость нечестивая». Одни боготворят, а другие проклинают пиццу с киви 🍕🥝';
+//        echo $text.'<br>';
+//        $text2 = preg_replace('/\xEE[\x80-\xBF][\x80-\xBF]|\xEF[\x81-\x83][\x80-\xBF]/', '', $text);
+//        $text3 = preg_replace ("/[^a-zA-ZА-Яа-я0-9\s]/","", $text);
+//        echo $text2.'<br>';
+//        $text4 = $this->removeEmojis($text);
+//        echo $text4;
+//        dd('dd');
         $rssChannels = NewsChannel::all()->pluck('url', 'id'); //->sortBy('id')
         $news = News::all()->pluck('title')->toArray();
         $preview_image = null;
+        $generated_image = null;
 //        dd($rssChannels);
         foreach ($rssChannels as $key => $value)
         switch ($key){
             case 1:
-                $rss = simplexml_load_file($rssChannels[$key]);
+                /*$rss = simplexml_load_file($rssChannels[$key]);
                 foreach ($rss->channel->item as $item){;
                     if(!in_array($item->title, $news)){
-                        $preview_image = $this->CreateImage($item->title, $item->description);
-                        $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, $item->category, $preview_image);
+//                        dd($item->description);
+                        $generated_image = $this->CreateImage($item->title, $item->description);
+                        $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, $generated_image, $item->category, $preview_image);
 //                        dd('new');
-                    }else {
-                        dd('old');
                     }
-                }
+//                    else {
+//                        dd('old');
+//                    }
+                }*/
                 break;
             case 2:
-                $rss = simplexml_load_file($rssChannels[$key], 'SimpleXMLElement', LIBXML_NOCDATA);
+                /*$rss = simplexml_load_file($rssChannels[$key], 'SimpleXMLElement', LIBXML_NOCDATA);
                 foreach ($rss->channel->item as $item){
 //                    dd('dgdg');
 
                     if(!in_array($item->title, $news)){
-                        if(preg_match('/.(png|jpg|jpeg)$/', $item->enclosure->attributes()->url)) {
-                            $imgUrl = $item->enclosure->attributes()->url;
-                            $preview_image = $this->CreateImage($item->title, $item->description, $imgUrl);
-                        }else {
-                            $preview_image = $this->CreateImage($item->title, $item->description);
+                        if($item->description) {
+                            if(preg_match('/.(png|jpg|jpeg)$/', $item->enclosure->attributes()->url)) {
+                                $imgUrl = $item->enclosure->attributes()->url;
+                                $generated_image = $this->CreateImage($item->title, $item->description, $imgUrl);
+                            }else {
+                                $generated_image = $this->CreateImage($item->title, $item->description);
+                            }
+                            $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, $generated_image, null, $preview_image);
                         }
-                        $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, null, $preview_image);
-                        /*if(preg_match('/.(png|jpg|jpeg)$/', $item->enclosure->attributes()->url)) {
-                            dd('ff');
-                        }*/
                     }
 //                    dd('old');
-                }
+                }*/
                 break;
+            case 3:
+                /*$rss = simplexml_load_file($rssChannels[$key], 'SimpleXMLElement', LIBXML_NOCDATA);
+                foreach ($rss->channel->item as $item){
+                    if(!in_array($item->title, $news)){
+                        $description = trim(str_replace(['&laquo;', '&raquo;', '&nbsp;', '&quot;'], ['«', '»', ' ', '"'], $item->description));
+                        if($description) {
+                            $generated_image = $this->CreateImage($item->title, $description);
+                            $this->CreateNews($item->title, $description, $item->link, $item->pubDate, $key, $generated_image, $item->category, $preview_image);
+//                            dd($item);
+                        }
+//                        dd('new');
+                    }
+                }*/
+                break;
+            case 4:
+                $rss = simplexml_load_file($rssChannels[$key], 'SimpleXMLElement', LIBXML_NOCDATA);
+//                dd($rss);
+                foreach ($rss->channel->item as $item){
+                    if(!in_array($item->title, $news)){
+//                        dd($item);
+                        $description = trim(str_replace('<br />', '', $item->description), " \n");
+                        if(isset($item->enclosure['type']) && (strpos($item->enclosure['type'], 'image') !== false)){
+                            $imgUrl = $item->enclosure['url'];
+                            $generated_image = $this->CreateImage($item->title, $description, $imgUrl);
+                        }else {
+                            $generated_image = $this->CreateImage($item->title, $description);
+                        }
+                        $this->CreateNews($item->title, $description, $item->link, $item->pubDate, $key, $generated_image, $item->category, $preview_image);
+//                        dd('new');
+                    }
+                }
         }
 //        $rss = simplexml_load_file($url);
         dd('dfgdfgh');
     }
 
-    private function CreateNews($title, $preview_description, $news_url, $public_date, $news_channel_id, $category = null, $preview_image = null){
+    function removeEmojis( $string ) {
+        $string = str_replace('«', '<<', $string);
+        $string = str_replace('»', '>>', $string);
+        $string = str_replace( "?", "{%}", $string );
+        $string  = mb_convert_encoding( $string, "ISO-8859-5", "UTF-8" );
+        $string  = mb_convert_encoding( $string, "UTF-8", "ISO-8859-5" );
+        $string  = str_replace( array( "?", "? ", " ?" ), array(""), $string );
+        $string  = str_replace( "{%}", "?", $string );
+        $string = str_replace('<<', '«', $string);
+        $string = str_replace('>>', '»', $string);
+        return trim( $string );
+    }
+
+    private function CreateNews($title, $preview_description, $news_url, $public_date, $news_channel_id, $generated_image, $category = null, $preview_image = null){
         $preview_description_short = rtrim(mb_strimwidth($preview_description, 0, 252))."...";
         News::create([
             'title' => $title,
             'preview_description' => $preview_description_short,
             'preview_image' => $preview_image,
+            'generated_image' => $generated_image,
             'category' => $category,
+            'detail_description' => $preview_description,
             'news_channel_id' => $news_channel_id,
             'news_url' => $news_url,
             'public_date' => $public_date
         ]);
+    }
+
+    private function wordWrapTextRu($text, $len){
+        $mes = iconv("UTF-8", "cp1251", $text);
+        $mes = wordwrap($mes, $len);//, "\n", 1);
+        $mes = iconv("cp1251", "UTF-8", $mes);
+        return $mes;
     }
 
     private function CreateImage($title, $description, $url = null){
@@ -99,19 +164,25 @@ class RssParserController extends Command
         $padding             = 15;
         $width_img           = 596;
         $height_img          = 300;
-        $max_len_title       = 65;
+        $max_len_title       = 35;//63;
         $font_size_title     = 30;
         $font_height_title   = 20;//20;
         $font_size_text      = 23;
         $font_height_text    = 15;
-        $max_len_text        = 84;
-        $img_path = 'images/news/';
+//        $max_len_text        = 80;
+        $max_len_text        = 45;
+        $img_path = 'images/news/generated/';
+        $title = $this->removeEmojis($title);
+//        $description = 'Немецкий автопроизводитель Porsche сообщил, что продажи его автомобилей в прошлом году выросли на 10%, до рекордных 281 тыс. По темпам роста продаж Porsche, самое прибыльное подразделение Volkswagen, опередил большинство мировых автопроизводителей. Основой хороших результатов Porsche стал рост продаж спортивных кроссоверов Macan и Cayenne — они выросли на 16% и 29% соответственно. «Мы оптимистичны по поводу того, что сможем поддержать высокий спрос в 2020 году»,— отметил директор по продажам Porsche Детлеф фон Платен. По его мнению, уровень продаж будет высоким благодаря введению ряда новых моделей и большому количеству заказов на электромобиль Taycan. Наибольший рост продажи Porsche показали в Европе — они увеличились на 15%, до 89 тыс. В Китае продажи выросли на 8%, до 87,8 тыс., а в США — на 7%, до 61,6 тыс. Яна Рождественская';
+        $description = $this->removeEmojis($description);
+//        $description = rtrim(mb_strimwidth($description, 0, 252))."...";
+        $description = Str::words($description, 50, "... \n\nЧитайте продолжение по ссылке в описании.");
 
         $fontPathTitle = public_path('/fonts/Roboto-Bold.ttf');
         $fontPathText = public_path('/fonts/Roboto.ttf');
 
         $img   = Image::canvas($width_canvas, $height_canvas, '#ffffff');
-        $lines_title = explode("\n", wordwrap($title, $max_len_title));
+        $lines_title = explode("\n", $this->wordWrapTextRu($title, $max_len_title));//, wordwrap($title, $max_len_title)); //
 //        $position = $start_position - ((count($lines) - 1) * $font_height);
         foreach ($lines_title as $line)
         {
@@ -138,7 +209,7 @@ class RssParserController extends Command
         }else{
             $position = $position + $margin + 20;
         }
-        $lines_description = explode("\n", wordwrap($description, $max_len_text));
+        $lines_description = explode("\n", $this->wordWrapTextRu($description, $max_len_text));//, wordwrap($description, $max_len_text));
 //        $position = $start_position - ((count($lines) - 1) * $font_height);
         foreach ($lines_description as $line)
         {

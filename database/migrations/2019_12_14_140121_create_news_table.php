@@ -18,7 +18,9 @@ class CreateNewsTable extends Migration
             $table->string('title');
             $table->text('preview_description'); //временное решение
             $table->string('preview_image')->nullable();
+            $table->string('generated_image');
             $table->text('detail_description')->nullable();
+            $table->text('detail_description_full')->nullable();
             $table->json('detail_images')->nullable();
             $table->smallInteger('news_channel_id');
             $table->string('category')->nullable();
