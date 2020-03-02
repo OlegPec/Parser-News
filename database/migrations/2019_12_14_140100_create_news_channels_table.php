@@ -15,8 +15,8 @@ class CreateNewsChannelsTable extends Migration
     {
         Schema::create('news_channels', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('url'); //адрес на rss
+            $table->string('name')->comment('Название ностного канала');
+            $table->string('url')->comment('Url адрес'); //адрес на rss
             $table->timestamps();
         });
     }

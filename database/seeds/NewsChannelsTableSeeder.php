@@ -23,6 +23,16 @@ class NewsChannelsTableSeeder extends Seeder
                 'name' => 'Meduza',
                 'url' => 'https://meduza.io/rss/all',
             ],
+            [
+                'id' => 3,
+                'name' => 'Lenta',
+                'url' => 'https://lenta.ru/rss',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Фонтанка',
+                'url' => 'https://www.fontanka.ru/fontanka.rss',
+            ],
         ];
 
         DB::table('news_channels')->insert($data);

@@ -46,27 +46,27 @@ class RssParserController extends Command
 //        dd('dd');
         $rssChannels = NewsChannel::all()->pluck('url', 'id'); //->sortBy('id')
         $news = News::all()->pluck('title')->toArray();
-        $preview_image = null;
+        $title_image = null;
         $generated_image = null;
 //        dd($rssChannels);
         foreach ($rssChannels as $key => $value)
         switch ($key){
             case 1:
-                /*$rss = simplexml_load_file($rssChannels[$key]);
+                $rss = simplexml_load_file($rssChannels[$key]);
                 foreach ($rss->channel->item as $item){;
                     if(!in_array($item->title, $news)){
 //                        dd($item->description);
                         $generated_image = $this->CreateImage($item->title, $item->description);
-                        $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, $generated_image, $item->category, $preview_image);
+                        $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, $generated_image, $item->category, $title_image);
 //                        dd('new');
                     }
 //                    else {
 //                        dd('old');
 //                    }
-                }*/
+                }
                 break;
             case 2:
-                /*$rss = simplexml_load_file($rssChannels[$key], 'SimpleXMLElement', LIBXML_NOCDATA);
+                $rss = simplexml_load_file($rssChannels[$key], 'SimpleXMLElement', LIBXML_NOCDATA);
                 foreach ($rss->channel->item as $item){
 //                    dd('dgdg');
 
@@ -74,29 +74,31 @@ class RssParserController extends Command
                         if($item->description) {
                             if(preg_match('/.(png|jpg|jpeg)$/', $item->enclosure->attributes()->url)) {
                                 $imgUrl = $item->enclosure->attributes()->url;
+                                $title_image = $this->savePreview($imgUrl);
                                 $generated_image = $this->CreateImage($item->title, $item->description, $imgUrl);
                             }else {
                                 $generated_image = $this->CreateImage($item->title, $item->description);
                             }
-                            $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, $generated_image, null, $preview_image);
+                            $this->CreateNews($item->title, $item->description, $item->link, $item->pubDate, $key, $generated_image, null, $title_image);
+                            $title_image = null;
                         }
                     }
 //                    dd('old');
-                }*/
+                }
                 break;
             case 3:
-                /*$rss = simplexml_load_file($rssChannels[$key], 'SimpleXMLElement', LIBXML_NOCDATA);
+                $rss = simplexml_load_file($rssChannels[$key], 'SimpleXMLElement', LIBXML_NOCDATA);
                 foreach ($rss->channel->item as $item){
                     if(!in_array($item->title, $news)){
                         $description = trim(str_replace(['&laquo;', '&raquo;', '&nbsp;', '&quot;'], ['«', '»', ' ', '"'], $item->description));
                         if($description) {
                             $generated_image = $this->CreateImage($item->title, $description);
-                            $this->CreateNews($item->title, $description, $item->link, $item->pubDate, $key, $generated_image, $item->category, $preview_image);
+                            $this->CreateNews($item->title, $description, $item->link, $item->pubDate, $key, $generated_image, $item->category, $title_image);
 //                            dd($item);
                         }
 //                        dd('new');
                     }
-                }*/
+                }
                 break;
             case 4:
                 $rss = simplexml_load_file($rssChannels[$key], 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -107,11 +109,13 @@ class RssParserController extends Command
                         $description = trim(str_replace('<br />', '', $item->description), " \n");
                         if(isset($item->enclosure['type']) && (strpos($item->enclosure['type'], 'image') !== false)){
                             $imgUrl = $item->enclosure['url'];
+                            $title_image = $this->savePreview($imgUrl);
                             $generated_image = $this->CreateImage($item->title, $description, $imgUrl);
                         }else {
                             $generated_image = $this->CreateImage($item->title, $description);
                         }
-                        $this->CreateNews($item->title, $description, $item->link, $item->pubDate, $key, $generated_image, $item->category, $preview_image);
+                        $this->CreateNews($item->title, $description, $item->link, $item->pubDate, $key, $generated_image, $item->category, $title_image);
+                        $title_image = null;
 //                        dd('new');
                     }
                 }
@@ -133,15 +137,16 @@ class RssParserController extends Command
         return trim( $string );
     }
 
-    private function CreateNews($title, $preview_description, $news_url, $public_date, $news_channel_id, $generated_image, $category = null, $preview_image = null){
-        $preview_description_short = rtrim(mb_strimwidth($preview_description, 0, 252))."...";
+    private function CreateNews($title, $description, $news_url, $public_date, $news_channel_id, $generated_image, $category = null, $title_image = null){
+//        $preview_description_short = rtrim(mb_strimwidth($preview_description, 0, 252))."...";
         News::create([
             'title' => $title,
-            'preview_description' => $preview_description_short,
-            'preview_image' => $preview_image,
+//            'preview_description' => $preview_description_short,
+            'description' => $description,
+            'title_image' => $title_image,
             'generated_image' => $generated_image,
             'category' => $category,
-            'detail_description' => $preview_description,
+            'detail_description' => $description,
             'news_channel_id' => $news_channel_id,
             'news_url' => $news_url,
             'public_date' => $public_date
@@ -230,6 +235,21 @@ class RssParserController extends Command
         $filename = md5($img_name).'.png'; //Задаем имя картинке
         $img->save(public_path($img_path).$filename, 70);
 //        dd('dgdg');
+        return $filename;
+    }
+
+
+    private function savePreview($preview_url){
+        $img = Image::make($preview_url);
+        $img_path = 'images/news/preview/';
+        try {
+            $img_name = bin2hex(random_bytes(16));
+        } catch (\Exception $e) {
+            $img_name = Str::random(32);
+        }
+        $filename = md5($img_name).'.png'; //Задаем имя картинке
+        $img->save(public_path($img_path).$filename, 70);
+
         return $filename;
     }
 
