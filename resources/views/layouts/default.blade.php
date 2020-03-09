@@ -10,11 +10,11 @@
 
 {{--    <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/css/suggestions.min.css" rel="stylesheet">--}}
     <link rel="icon" type="image/ico" href="{{asset('images/favicon.ico')}}">
-    <style>
+{{--    <style>
         .card-columns {
             column-count: 2;
         }
-    </style>
+    </style>--}}
     <link rel="stylesheet" href="{{asset('vendor/bootstrap/css/bootstrap.min.css')}}">
 
 

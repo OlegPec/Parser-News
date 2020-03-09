@@ -160,7 +160,7 @@ class RssParserController extends Command
         return $mes;
     }
 
-    private function CreateImage($title, $description, $url = null){
+    public function CreateImage($title, $description, $url = null){
 
         $width_canvas        = 626;
         $height_canvas       = 1200;
