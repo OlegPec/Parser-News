@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+        <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" infinite-scroll-immediate-check="false">
             <div class="card-deck mt-5">
                 <div class="row">
                     <div class="card" v-for="element in newsList">
@@ -21,8 +21,19 @@
                             <small class="text-muted">{{ element.public_date }}</small>
                         </div>
                     </div>
+                    <div class="preloader-block" :class="{'show': preloader, 'fade': !preloader, 'last': endNews}">
+                        <div class="preloader">
+                            <div class="preloader-content">
+                                <div class="spinner-border" role="status">
+
+                                </div>
+<!--                                <p>Загрузка...</p>-->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -38,12 +49,15 @@
             return {
                 page: 1,
                 newsList: this.news,
+                preloader: false,
+                endNews: false,
                 // image
                 // busy: false
             }
         },
         methods: {
             loadMore: function() {
+                this.preloader = true;
                 axios.get('/get-news?page='+this.page, {
                     // _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     // page: this.page
@@ -51,6 +65,10 @@
                     .then(response => {
                         // console.log(response.data);
                         if(response.data.success) {
+                            this.preloader = false;
+                            if(response.data.result.length === 0){
+                                this.endNews = true;
+                            }
                             this.page++;
                             this.newsList = this.newsList.concat(response.data.result);
                             // console.log(this.newsList);

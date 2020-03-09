@@ -25,6 +25,50 @@
             /*margin-left: 15px;*/
             margin-bottom: 20px;
         }
+        .preloader-block.show {
+            display: block;
+        }
+        .preloader-block.fade, .preloader-block.last {
+            display: none;
+        }
+        .preloader {
+            /*position: absolute;*/
+            /*left: 0;*/
+            /*top: 0;*/
+            /*z-index: 999;*/
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            /*display: none;*/
+        }
+        /*.preloader-content > .spinner-border{*/
+        /*    border: .25em solid #363a7b;*/
+        /*    border-right-color: transparent;*/
+        /*}*/
+        .spinner-border {
+            display: inline-block;
+            width: 2.5rem;
+            height: 2.5rem;
+            vertical-align: text-bottom;
+            border: .25em solid #363a7b;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spinner-border 0.75s linear infinite;
+        }
+        .preloader-block {
+            /*position: relative;*/
+            height: 50px;
+            width: 100%;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+        @keyframes spinner-border {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 
     <nav class="navbar navbar-dark bg-black justify-content-center">
