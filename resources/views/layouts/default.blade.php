@@ -9,13 +9,15 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 {{--    <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/css/suggestions.min.css" rel="stylesheet">--}}
-    <link rel="icon" type="image/ico" href="{{asset('images/favicon.ico')}}">
+{{--    <link rel="icon" type="image/ico" href="{{asset('images/favicon.ico')}}">--}}
 {{--    <style>
         .card-columns {
             column-count: 2;
         }
     </style>--}}
     <link rel="stylesheet" href="{{asset('vendor/bootstrap/css/bootstrap.min.css')}}">
+
+    <script src="{{asset('/js/app.js')}}"></script>
 
 
 

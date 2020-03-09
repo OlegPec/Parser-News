@@ -14,9 +14,11 @@
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('/get-news', 'HomeController@getNews')->name('getNews');
+
 Route::get('/show/{id}', 'NewsController@show')->name('showNews');
 //Route::get('/downloadImg/{id}', 'NewsController@downloadImg')->name('downloadINewsImg');
 Route::post('/uploadImg/{id}', 'NewsController@uploadImg')->name('uploadNewsImg');
 
 
-Route::get('/get-news', '\App\Console\Commands\RssParserController@handle');
+Route::get('/getNew-news', '\App\Console\Commands\RssParserController@handle');

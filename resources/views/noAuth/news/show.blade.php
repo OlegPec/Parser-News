@@ -27,18 +27,18 @@
                 @csrf
                 </form> @endif</span>
         </div>
-        <div class="row mt-3">
+        <div class="row mt-3 pb-3">
             <div class="col-12">
                 <h4>{!! $news->title !!}</h4>
                 <p class="text-center">
                     @if($news->title_image)
                         <img src="{{ asset('images/news/preview/'.$news->title_image) }}" alt="Card image cap" class="img-fluid">
-                    @else
-                        <img src="{{ asset('images/news/default_img.svg') }}" alt="Card image cap" class="img-fluid">
+{{--                    @else--}}
+{{--                        <img src="{{ asset('images/news/default_img.svg') }}" alt="Card image cap" class="img-fluid">--}}
                     @endif
                 </p>
                 <p>{!! $news->description !!}</p>
-                <a class="btn btn-dark bg-black w-100" href="{{ $news->news_url }}">Читать на {{ $news->news_channel->name }}</a>
+                <a class="btn btn-dark bg-black w-100" href="{{ $news->news_url }}" target="_blank">Читать на {{ $news->news_channel->name }}</a>
                 @if(Auth::user())
 {{--                    <a href="{{ route('downloadINewsImg', $news->id) }}">Скачать сгенерированную картинку</a>--}}
                 <div class="d-flex justify-content-center">
