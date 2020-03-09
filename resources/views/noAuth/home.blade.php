@@ -20,7 +20,7 @@
     <nav class="navbar navbar-dark bg-black justify-content-center">
         <a class="navbar-brand" href="{{ route('home') }}">evolnews</a>
     </nav>
-    <div class="container">
+{{--    <div class="container">--}}
         <div class="d-flex justify-content-between"><span>@if(Auth::user()) Привет {{ Auth::user()->name }} <a href="{{ route('logout') }}" onclick="event.preventDefault()
                 document.getElementById('logout-form').submit();" class="">
                     {{ __('Выйти') }}</a>
@@ -28,12 +28,12 @@
                 @csrf
                 </form> @endif</span>
         </div>
-        <div class="card-columns mt-5">
+        <div class="row mt-5 justify-content-center">
 {{--            <div class="row">--}}
                 @foreach($news as $element)
 {{--                <div class="col-md-4 mt-3">--}}
 
-                    <div class="card">
+                    <div class="card col-12 col-md-3 m-4">
                         <a href="{{ route('showNews', $element->id) }}">
 {{--                            <img class="card-img-top height-img" src="{{ asset('images/news/preview/'.$element->title_image) }}" alt="Card image cap">--}}
                             @if($element->title_image)
@@ -45,7 +45,7 @@
                         <a href="{{ route('showNews', $element->id) }}">
                             <div class="card-body">
                                 <h5 class="card-title">{!! $element->title !!}</h5>
-                                <p class="card-text">{{ rtrim(mb_strimwidth($element->description, 0, 252))."..." }}</p>
+                                <p class="card-text">{!! rtrim(mb_strimwidth($element->description, 0, 252))."..." !!}</p>
                             </div>
                         </a>
                         <div class="card-footer">
@@ -57,6 +57,6 @@
                 @endforeach
 {{--            </div>--}}
         </div>
-    </div>
+{{--    </div>--}}
 
 @endsection

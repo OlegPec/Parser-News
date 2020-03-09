@@ -25,13 +25,18 @@ class NewsChannelsTableSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'name' => 'Lenta',
-                'url' => 'https://lenta.ru/rss',
+                'name' => 'Фонтанка.ру',
+                'url' => 'https://www.fontanka.ru/fontanka.rss',
             ],
             [
                 'id' => 4,
-                'name' => 'Фонтанка',
-                'url' => 'https://www.fontanka.ru/fontanka.rss',
+                'name' => 'Лента',
+                'url' => 'https://lenta.ru/rss',
+            ],
+            [
+                'id' => 5,
+                'name' => 'Rambler',
+                'url' => 'https://news.rambler.ru/rss/',
             ],
         ];
 

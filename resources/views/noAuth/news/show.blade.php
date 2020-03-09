@@ -29,7 +29,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-12">
-                <h4>{{ $news->title }}</h4>
+                <h4>{!! $news->title !!}</h4>
                 <p class="text-center">
                     @if($news->title_image)
                         <img src="{{ asset('images/news/preview/'.$news->title_image) }}" alt="Card image cap" class="img-fluid">
