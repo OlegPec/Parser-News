@@ -44,7 +44,7 @@
                         </a>
                         <a href="{{ route('showNews', $element->id) }}">
                             <div class="card-body">
-                                <h5 class="card-title">{{ $element->title }}</h5>
+                                <h5 class="card-title">{!! $element->title !!}</h5>
                                 <p class="card-text">{{ rtrim(mb_strimwidth($element->description, 0, 252))."..." }}</p>
                             </div>
                         </a>
