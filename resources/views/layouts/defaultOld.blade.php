@@ -17,7 +17,7 @@
     </style>--}}
     <link rel="stylesheet" href="{{asset('vendor/bootstrap/css/bootstrap.min.css')}}">
 
-
+    <script src="{{asset('/js/app.js')}}"></script>
 
 
 
@@ -28,7 +28,6 @@
     <div class="wrapper">
         @yield('content')
     </div>
-    <script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>
 

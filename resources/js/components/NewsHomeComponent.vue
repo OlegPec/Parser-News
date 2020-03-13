@@ -3,19 +3,21 @@
         <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" infinite-scroll-immediate-check="true">
             <div class="card-deck mt-5">
                 <div class="row">
-                    <div class="card" v-for="element in newsList">
-                        <a :href="/show/+element.id">
+                    <div class="card" v-for="element in getNews">
+<!--                        <a :href="/show/+element.id">-->
                             <img :src="getImgUrl(element.title_image)" alt="Card image cap" class="card-img-top img-fluid" v-if="element.title_image">
-                        </a>
+<!--                        </a>-->
                         <div class="card-body">
 <!--                            <a href="{{ route('showNews', $element->id) }}">-->
 <!--                                <h5 class="card-title">{!! $element->title !!}</h5>-->
 <!--                                <p class="card-text">{!! rtrim(mb_strimwidth($element->description, 0, 252))."..." !!}</p>-->
 <!--                            </a>-->
-                            <a :href="/show/+element.id">
+<!--                            <a :href="/show/+element.id">-->
+                            <router-link to="/show/1234">
                                 <h5 class="card-title" v-html="element.title"></h5>
                                 <p class="card-text" v-html="getDescription(element.description)"></p>
-                            </a>
+                            </router-link>
+<!--                            </a>-->
                         </div>
                         <div class="card-footer">
                             <small class="text-muted">{{ element.public_date }}</small>
@@ -40,15 +42,19 @@
 
 <script>
     // import image from '../images/news/preview';
+    import axios from 'axios';
     // var count = 0;
     export default {
+        name: "CardNews.vue",
         props: [
-            'news',
+            // 'news',
         ],
+        // store,
         data() {
             return {
                 page: 1,
-                newsList: this.news,
+                // newsList: this.news,
+                // newsList: this.getNewsTest(),
                 preloader: false,
                 endNews: false,
                 // image
@@ -70,7 +76,11 @@
                                 this.endNews = true;
                             }
                             this.page++;
-                            this.newsList = this.newsList.concat(response.data.result);
+
+
+                            // this.newsList = this.newsList.concat(response.data.result);
+                            this.$store.commit('concatNews', response.data.result)
+
                             // console.log(this.newsList);
                             // console.log(this.page)
                             // this.isOpen = !this.isOpen;
@@ -101,12 +111,19 @@
                 }
                 return sliced;
                 // {!! rtrim(mb_strimwidth($element->description, 0, 252))."..." !!}
+            },
+            getNewsTest() {
+                return this.$store.state.newsStor;
             }
         },
         mounted() {
-            console.log('Component mounted.')
+            console.log('Component mounted.');
+
         },
         computed: {
+            getNews(){
+                return this.$store.state.newsStor
+            },
             classObject(id) {
                 // let items = [1];
                 // let item = items[Math.floor(Math.random() * items.length)];
@@ -120,11 +137,77 @@
         }
     }
 </script>
-<style scoped>
+<!--<style scoped>
     .flex-grow-1 {
         flex-grow: 1;
     }
     .flex-grow-2 {
         flex-grow: 2;
+    }
+</style>-->
+<style scoped>
+    .height-img {
+        height: 240px;
+    }
+    .bg-black {
+        background: #000;
+    }
+    .card a {
+        color: black;
+    }
+    .card {
+        /*height: 500px;*/
+    }
+    .card-deck .card {
+        /*width: calc(100px - 20px) !important;*/
+        /*min-width: 290px;*/
+        min-width: 290px;
+        /*margin-right: 15px;*/
+        /*margin-left: 15px;*/
+        margin-bottom: 20px;
+    }
+    .preloader-block.show {
+        display: block;
+    }
+    .preloader-block.fade, .preloader-block.last {
+        display: none;
+    }
+    .preloader {
+        /*position: absolute;*/
+        /*left: 0;*/
+        /*top: 0;*/
+        /*z-index: 999;*/
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        /*display: none;*/
+    }
+    /*.preloader-content > .spinner-border{*/
+    /*    border: .25em solid #363a7b;*/
+    /*    border-right-color: transparent;*/
+    /*}*/
+    .spinner-border {
+        display: inline-block;
+        width: 2.5rem;
+        height: 2.5rem;
+        vertical-align: text-bottom;
+        border: .25em solid #363a7b;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spinner-border 0.75s linear infinite;
+    }
+    .preloader-block {
+        /*position: relative;*/
+        height: 50px;
+        width: 100%;
+        margin-top: -10px;
+        margin-bottom: 15px;
+    }
+    @keyframes spinner-border {
+        to {
+            transform: rotate(360deg);
+        }
     }
 </style>
