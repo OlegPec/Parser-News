@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" infinite-scroll-immediate-check="false">
+        <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" infinite-scroll-immediate-check="true">
             <div class="card-deck mt-5">
                 <div class="row">
                     <div class="card" v-for="element in newsList">
@@ -93,7 +93,8 @@
                 return '../images/news/preview/'+pic;
             },
             getDescription(desc){
-                var sliced = desc.slice(0,250);
+                // var sliced = desc.slice(0,250);
+                var sliced = desc.slice(0,150);
                 if (sliced.length < desc.length) {
                     sliced = sliced.trim();
                     sliced += '...';
@@ -104,6 +105,26 @@
         },
         mounted() {
             console.log('Component mounted.')
+        },
+        computed: {
+            classObject(id) {
+                // let items = [1];
+                // let item = items[Math.floor(Math.random() * items.length)];
+                // console.log(item);
+                let test = id % 2 === 1;
+                return {
+                    'flex-grow-1': true,
+                    'flex-grow-2': test
+                }
+            }
         }
     }
 </script>
+<style scoped>
+    .flex-grow-1 {
+        flex-grow: 1;
+    }
+    .flex-grow-2 {
+        flex-grow: 2;
+    }
+</style>

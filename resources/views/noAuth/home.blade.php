@@ -20,6 +20,7 @@
         }
         .card-deck .card {
             /*width: calc(100px - 20px) !important;*/
+            /*min-width: 290px;*/
             min-width: 290px;
             /*margin-right: 15px;*/
             /*margin-left: 15px;*/
