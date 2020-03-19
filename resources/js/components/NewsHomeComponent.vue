@@ -5,7 +5,9 @@
                 <div class="row">
                     <div class="card" v-for="element in getNews">
 <!--                        <a :href="/show/+element.id">-->
+                        <router-link :to="'/show/'+element.id">
                             <img :src="getImgUrl(element.title_image)" alt="Card image cap" class="card-img-top img-fluid" v-if="element.title_image">
+                        </router-link>
 <!--                        </a>-->
                         <div class="card-body">
 <!--                            <a href="{{ route('showNews', $element->id) }}">-->
@@ -13,7 +15,7 @@
 <!--                                <p class="card-text">{!! rtrim(mb_strimwidth($element->description, 0, 252))."..." !!}</p>-->
 <!--                            </a>-->
 <!--                            <a :href="/show/+element.id">-->
-                            <router-link to="/show/1234">
+                            <router-link :to="'/show/'+element.id">
                                 <h5 class="card-title" v-html="element.title"></h5>
                                 <p class="card-text" v-html="getDescription(element.description)"></p>
                             </router-link>

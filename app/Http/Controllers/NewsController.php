@@ -15,11 +15,19 @@ use Image;
 
 class NewsController extends Controller
 {
-    public function show($id){
+    /*public function show($id){
         $news = News::find($id);
         $news->load('news_channel');
 
         return view('noAuth.news.show', compact('news'));
+    }*/
+
+    public function show($id){
+        $news = News::find($id);
+        $news->load('news_channel');
+
+//        return view('noAuth.news.show', compact('news'));
+        return response()->json(['success' => true, 'result' => $news]);
     }
 
     /*public function downloadImg($id) {
