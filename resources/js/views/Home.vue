@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CardNews :news="news"></CardNews>
+        <CardNews></CardNews>
 <!--        {{someUnrelatedVar}}-->
     </div>
 </template>
@@ -9,7 +9,20 @@
     import CardNews from '../components/NewsHomeComponent';
     export default {
         name: "Home",
-        props: ['news'],
+        // props: ['news'],
+        // data() {
+        //     return {
+        //         getNews: []
+        //     }
+        // },
+        // mounted() {
+            // this.getNews = this.$store.state.newsStor;
+        // },
+        // computed: {
+            // getNewsMethod () {
+            //     return store.state.newsStor
+            // }
+        // },
         components: {
             CardNews
         }

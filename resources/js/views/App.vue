@@ -5,6 +5,7 @@
 <!--            <a class="navbar-brand" href="{{ route('home') }}">evolnews</a>-->
         </nav>
 <!--        <h1>Vue Router Demo App</h1>-->
+        <navigationMenu></navigationMenu>
 
 
 
@@ -14,7 +15,6 @@
                 <!--            <router-link :to="{ name: 'home' }">Home</router-link> |-->
 <!--                <router-link to="/show/1234">Hello World</router-link>-->
 <!--            </p>-->
-
             <router-view>
 
             </router-view>
@@ -25,6 +25,7 @@
 <script>
     import Vue from 'vue'
     import Vuex from 'vuex'
+    import navigationMenu from '../components/Menu.vue'
 
     Vue.use(Vuex);
     // Vue.use(Vuex);
@@ -53,6 +54,9 @@
                 return store.state.newsStor
             }
         },
+        components: {
+            navigationMenu
+        }
     }
 </script>
 
