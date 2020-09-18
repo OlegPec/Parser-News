@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\NewsShowResource;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,11 +24,12 @@ class NewsController extends Controller
     }*/
 
     public function show($id){
-        $news = News::find($id);
-        $news->load('news_channel');
+        $news = News::with('news_channel', 'user')->find($id);
+//        dd($news);
 
 //        return view('noAuth.news.show', compact('news'));
-        return response()->json(['success' => true, 'result' => $news]);
+//        response()->json(['success' => true, 'result' => $news]);
+        return new NewsShowResource($news);
     }
 
     /*public function downloadImg($id) {
@@ -61,7 +63,7 @@ class NewsController extends Controller
 
         if ($validator->fails()) {
             $errors = $validator->errors();
-            return response()->json(['error' => $errors->first('image')]); //Возвращаем текст если валидация не прошла
+            return response()->json(['error' => $errors->first('image')], 422); //Возвращаем текст если валидация не прошла
         }
 
         $path = 'images/news/preview/';
@@ -75,10 +77,11 @@ class NewsController extends Controller
         }
 
         $image = $request->file('image');
+
         $img = Image::make($request->file('image'));
 
-        $filename = md5($img_name).'.'.$image->getClientOriginalExtension(); //Задаем имя картинке
-        $img->save(public_path($path).$filename, 70);
+        $filename = md5($img_name) . '.' . $image->getClientOriginalExtension(); //Задаем имя картинке
+        $img->save(public_path($path) . $filename, 70);
 
         $old_image = $news->title_image;
         $old_image_generate = $news->generated_image;
@@ -92,11 +95,11 @@ class NewsController extends Controller
         $news->save();
 
         unlink(public_path($path_generated . $old_image_generate));
-        if($old_image) {
+        if ($old_image) {
             unlink(public_path($path . $old_image));
         }
 
-        return back()->with('success', false);
+        return response()->json(['title_image' => $filename, 'generated_image' => $img_generate], 200);
     }
 
 }

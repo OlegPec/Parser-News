@@ -6,6 +6,7 @@ import Home from './views/Home'
 import NotFound from './views/errors/NotFound'
 import Register from './views/Register'
 import Login from './views/Login'
+import Favorites from './views/Favorites'
 // import Dashboard from './views/user/Dashboard'
 // import AdminDashboard from './views/admin/Dashboard'
 
@@ -41,6 +42,14 @@ const routes = [
         component: Login,
         meta: {
             auth: false
+        }
+    },
+    {
+        path: '/favorites',
+        name: 'favorites',
+        component: Favorites,
+        meta: {
+            auth: true
         }
     },
     // USER ROUTES

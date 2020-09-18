@@ -48,4 +48,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function news()
+    {
+        return $this->belongsToMany('App\Models\News', 'user_m2m_news');
+    }
 }

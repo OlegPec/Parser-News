@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,19 +19,24 @@ use Illuminate\Http\Request;
 //});
 
 Route::get('/get-news', 'HomeController@getNews')->name('getNews');
-Route::post('news/{id}', 'NewsController@show')->name('showNews');
+Route::get('news/{id}', 'NewsController@show')->name('showNews');
+Route::group(['middleware' => 'isAdmin'], function () {
+    Route::post('/uploadImg/{id}', 'NewsController@uploadImg')->name('uploadNewsImg');
+});
+
 Route::prefix('auth')->group(function () {
     Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login');
     Route::get('refresh', 'AuthController@refresh');
-    Route::group(['middleware' => 'auth:api'], function(){
+    Route::group(['middleware' => 'auth:api'], function() {
         Route::get('user', 'AuthController@user');
         Route::post('logout', 'AuthController@logout');
     });
 });
 
 Route::group(['middleware' => 'auth:api'], function(){
+    Route::resource('favorites', 'FavoritesController');
     // Users
-    Route::get('users', 'UserController@index')->middleware('isAdmin');
-    Route::get('users/{id}', 'UserController@show')->middleware('isAdminOrSelf');
+//    Route::get('users', 'UserController@index')->middleware('isAdmin');
+//    Route::get('users/{id}', 'UserController@show')->middleware('isAdminOrSelf');
 });

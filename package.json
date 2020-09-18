@@ -13,19 +13,20 @@
     "axios": "^0.19",
     "cross-env": "^5.1",
     "laravel-mix": "^4.0.7",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.20",
     "resolve-url-loader": "^2.3.1",
-    "sass": "^1.15.2",
+    "sass": "^1.26.10",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.12"
   },
   "dependencies": {
+    "@websanova/vue-auth": "^3.3.1",
+    "es6-promise": "^4.2.8",
     "public": "^0.1.5",
-    "vue": "latest",
+    "vue": "^2.6.12",
     "vue-axios": "latest",
     "vue-infinite-scroll": "^2.0.2",
-    "vue-router": "latest",
-    "vuex": "^3.1.3",
-    "@websanova/vue-auth": "latest"
+    "vue-router": "^3.4.3",
+    "vuex": "^3.5.1"
   }
 }

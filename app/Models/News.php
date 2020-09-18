@@ -11,7 +11,13 @@ class News extends Model
 
     protected $fillable = ['title', 'description', 'title_image', 'news_channel_id', 'category', 'news_url', 'public_date', 'detail_description', 'generated_image'];
 
-    public function news_channel(){
+    public function news_channel()
+    {
         return $this->belongsTo('App\Models\NewsChannel', 'news_channel_id', 'id');
+    }
+
+    public function user()
+    {
+        return$this->belongsToMany('App\User', 'user_m2m_news');
     }
 }

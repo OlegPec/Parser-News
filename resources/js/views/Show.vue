@@ -27,6 +27,32 @@
 <!--                @endif-->
             </div>
         </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="favorites" :class="{ active: inFavorites }" @click="addFavorites">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path class="favorites-path" d="M14.1666 2.5H5.83329C4.91663 2.5 4.17496 3.25 4.17496 4.16667L4.16663 17.5L9.99996 15L15.8333 17.5V4.16667C15.8333 3.25 15.0833 2.5 14.1666 2.5ZM14.1666 15L9.99996 13.1833L5.83329 15V4.16667H14.1666V15Z" fill="#4D4D4D"/>
+                    </svg>
+                    В избранное
+                </div>
+            </div>
+        </div>
+        <div class="row" v-if="$auth.check(2)">
+            <div class="text-center w-100">
+                <a :href="'/images/news/generated/'+showNews.generated_image" download>Скачать сгенерированную картинку</a>
+            </div>
+            <div class="mt-5 pb-5">
+<!--                <form action="{{ route('uploadNewsImg', $news->id) }}" method="POST" enctype="multipart/form-data">-->
+
+                <label>File
+                    <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+                </label>
+                <button class="btn btn-bold btn-success img-save" v-on:click="submitFile()">Сохранить</button>
+<!--                    <input type="file" name="image" id="upload">-->
+<!--                    <button class="btn btn-bold btn-success img-save" type="submit">Сохранить</button>-->
+<!--                </form>-->
+            </div>
+        </div>
     </div>
 </template>
 
@@ -36,25 +62,29 @@
         name: "Show",
         data() {
             return {
-                'showNews': [],
-                'newsId': this.$route.params.id,
-                'test': true
+                showNews: [],
+                newsId: this.$route.params.id,
+                test: true,
+                file: '',
+                inFavorites: false
             }
         },
         created() {
             this.showCurrentNews();
+        },
+        mounted() {
         },
         methods: {
             handleBack() {
                 this.$router.back();
             },
             showCurrentNews() {
-                axios.post('/news/'+this.newsId, {
+                axios.get('/news/'+this.newsId, {
                     _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 })
                     .then(response => {
                         // console.log(response.data);
-                        if(response.data.success) {
+                        if(response.data.data) {
                             // this.messages = response.data.messages;
                             // this.auth_id = response.data.auth_id;
                             // this.isOpen = response.data.open;
@@ -62,7 +92,8 @@
                             // this.$emit('readTicket');
                             // this.isEditCategory = false;
                             // this.showNews = response.data.result;
-                            this.showNews = Object.assign({}, this.showNews, response.data.result)
+                            this.showNews = Object.assign({}, this.showNews, response.data.data)
+                            this.inFavorites = this.showNews.in_favorites
                         }else {
                             this.showNews = null;
                         }
@@ -72,6 +103,43 @@
                         //         messBlock.scrollTop = messBlock.scrollHeight;
                         //     });
                     });
+            },
+            handleFileUpload() {
+                this.file = this.$refs.file.files[0];
+            },
+            submitFile() {
+                let formData = new FormData();
+                formData.append('image', this.file);
+                axios.post( '/uploadImg/'+this.showNews.id,
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }
+                ).then((response) => {
+                    this.showNews.title_image = response.data.title_image;
+                    this.showNews.generated_image = response.data.generated_image;
+                })
+                .catch(function(){
+
+                });
+            },
+            addFavorites() {
+                let data = JSON.stringify({'news_id': this.showNews.id})
+                axios.post('favorites', data, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then((response) => {
+                    // console.log(response.data.method)
+                    this.inFavorites = response.data.method === 'attached';
+                })
+                .catch(function(){
+
+                });
             }
         },
         computed: {

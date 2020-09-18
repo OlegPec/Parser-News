@@ -9,11 +9,12 @@ const config = {
     router: router,
     tokenDefaultName: 'laravel-vue-spa',
     tokenStore: ['localStorage'],
-    rolesVar: 'role',
-    registerData: {url: 'auth/register', method: 'POST', redirect: '/login'},
-    loginData: {url: 'auth/login', method: 'POST', redirect: '/', fetchUser: true},
+    rolesKey: 'role',
+    registerData: {url: 'auth/register', method: 'POST', redirect: '/login', autoLogin: true, fetchUser: true, staySignedIn: true},
+    loginData: {url: 'auth/login', method: 'POST', redirect: '/', fetchUser: true, staySignedIn: true},
     logoutData: {url: 'auth/logout', method: 'POST', redirect: '/', makeRequest: true},
-    fetchData: {url: 'auth/user', method: 'GET', enabled: true},
-    refreshData: {url: 'auth/refresh', method: 'GET', enabled: true, interval: 30}
+    fetchData: {url: 'auth/user', method: 'GET', enabled: true, fetchUser: true},
+    refreshData: {url: 'auth/refresh', method: 'GET', enabled: true, interval: 30},
+    notFoundRedirect: {path: '/'}
 };
 export default config
