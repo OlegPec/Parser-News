@@ -24698,39 +24698,41 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "news-footer" }, [
-      _c(
-        "div",
-        {
-          staticClass: "favorites",
-          class: { active: _vm.inFavorites },
-          on: { click: _vm.addFavorites }
-        },
-        [
-          _c(
-            "svg",
+      _vm.$auth.user()
+        ? _c(
+            "div",
             {
-              attrs: {
-                width: "20",
-                height: "20",
-                viewBox: "0 0 20 20",
-                fill: "none",
-                xmlns: "http://www.w3.org/2000/svg"
-              }
+              staticClass: "favorites",
+              class: { active: _vm.inFavorites },
+              on: { click: _vm.addFavorites }
             },
             [
-              _c("path", {
-                staticClass: "favorites-path",
-                attrs: {
-                  d:
-                    "M14.1666 2.5H5.83329C4.91663 2.5 4.17496 3.25 4.17496 4.16667L4.16663 17.5L9.99996 15L15.8333 17.5V4.16667C15.8333 3.25 15.0833 2.5 14.1666 2.5ZM14.1666 15L9.99996 13.1833L5.83329 15V4.16667H14.1666V15Z",
-                  fill: "#4D4D4D"
-                }
-              })
+              _c(
+                "svg",
+                {
+                  attrs: {
+                    width: "20",
+                    height: "20",
+                    viewBox: "0 0 20 20",
+                    fill: "none",
+                    xmlns: "http://www.w3.org/2000/svg"
+                  }
+                },
+                [
+                  _c("path", {
+                    staticClass: "favorites-path",
+                    attrs: {
+                      d:
+                        "M14.1666 2.5H5.83329C4.91663 2.5 4.17496 3.25 4.17496 4.16667L4.16663 17.5L9.99996 15L15.8333 17.5V4.16667C15.8333 3.25 15.0833 2.5 14.1666 2.5ZM14.1666 15L9.99996 13.1833L5.83329 15V4.16667H14.1666V15Z",
+                      fill: "#4D4D4D"
+                    }
+                  })
+                ]
+              ),
+              _vm._v("\n                В избранное\n            ")
             ]
-          ),
-          _vm._v("\n                В избранное\n            ")
-        ]
-      ),
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "share" }, [
         _c(
