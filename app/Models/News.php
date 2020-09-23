@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\UsesUuid;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
@@ -19,5 +20,10 @@ class News extends Model
     public function user()
     {
         return$this->belongsToMany('App\User', 'user_m2m_news');
+    }
+
+    protected function getPublicDateAttribute($value)
+    {
+       return Carbon::parse($value)->formatLocalized('%e %B, %Y');
     }
 }

@@ -1,14 +1,15 @@
 <template>
     <div>
-        <nav class="navbar navbar-dark bg-black justify-content-center">
+        <nav class="navbar navbar-dark">
+            <div class="nav-left"></div>
             <router-link :to="{ name: 'home',  params:{someUnrelatedVar: 100} }" class="navbar-brand">evolnews</router-link>
 <!--            <a class="navbar-brand" href="{{ route('home') }}">evolnews</a>-->
             <div class="nav-favorite">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 18L21 19V3C21 1.9 20.1 1 19 1H8.99C7.89 1 7 1.9 7 3H17C18.1 3 19 3.9 19 5V18ZM15 5H5C3.9 5 3 5.9 3 7V23L10 20L17 23V7C17 5.9 16.1 5 15 5Z" fill="#E1E1E1"/>
-                </svg>
                 <router-link :to="{ name: 'favorites' }">
-                    Избранное
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 18L21 19V3C21 1.9 20.1 1 19 1H8.99C7.89 1 7 1.9 7 3H17C18.1 3 19 3.9 19 5V18ZM15 5H5C3.9 5 3 5.9 3 7V23L10 20L17 23V7C17 5.9 16.1 5 15 5Z" fill="#E1E1E1"/>
+                    </svg>
+                    <span>Избранное</span>
                 </router-link>
             </div>
         </nav>

@@ -30,6 +30,7 @@ class NewsShowResource extends JsonResource
             'active' => $this->active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'news_channel' => $this->news_channel,
 
             'in_favorites' =>  Auth::id() ? in_array(Auth::id(), $this->user->pluck('id')->toArray()) : false
 //            'in_favorites' => (Auth::id() ?: null) === $this->user->id

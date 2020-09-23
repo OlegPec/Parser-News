@@ -3110,28 +3110,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       routes: {
         // UNLOGGED
         unlogged: [{
-          name: 'Inscription',
-          path: 'register'
-        }, {
-          name: 'Connexion',
+          name: 'Авторизация',
           path: 'login'
-        }],
-        // LOGGED USER
-        user: [{
-          name: 'Dashboard',
-          path: 'dashboard'
-        }],
-        // LOGGED ADMIN
-        admin: [{
-          name: 'Admin Dashboard',
-          path: 'admin.dashboard'
+        }, {
+          name: 'Регистрация',
+          path: 'register'
         }]
+        /*// LOGGED USER
+        user: [
+            {
+                name: 'Dashboard',
+                path: 'dashboard'
+            }
+        ],
+        // LOGGED ADMIN
+        admin: [
+            {
+                name: 'Admin Dashboard',
+                path: 'admin.dashboard'
+            }
+        ]*/
+
       }
     };
   },
@@ -3337,6 +3343,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -3392,9 +3399,6 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-//
-//
-//
 //
 //
 //
@@ -3706,6 +3710,20 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -23748,33 +23766,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("nav", { attrs: { id: "nav" } }, [
+  return _c("div", { staticClass: "nav-auth" }, [
     _c(
       "ul",
       [
-        _vm._l(_vm.routes.unlogged, function(route, key) {
-          return !_vm.$auth.check()
-            ? _c(
-                "li",
-                { key: route.path },
-                [
-                  _c(
-                    "router-link",
-                    { key: key, attrs: { to: { name: route.path } } },
-                    [
-                      _vm._v(
-                        "\n                " +
-                          _vm._s(route.name) +
-                          "\n            "
-                      )
-                    ]
-                  )
-                ],
-                1
-              )
-            : _vm._e()
-        }),
-        _vm._v(" "),
         _vm._l(_vm.routes.user, function(route, key) {
           return _vm.$auth.check(1)
             ? _c(
@@ -23798,8 +23793,8 @@ var render = function() {
             : _vm._e()
         }),
         _vm._v(" "),
-        _vm._l(_vm.routes.admin, function(route, key) {
-          return _vm.$auth.check(2)
+        _vm._l(_vm.routes.unlogged, function(route, key) {
+          return !_vm.$auth.check()
             ? _c(
                 "li",
                 { key: route.path },
@@ -23823,6 +23818,8 @@ var render = function() {
         _vm._v(" "),
         _vm.$auth.check()
           ? _c("li", [
+              _c("span", [_vm._v("Привет " + _vm._s(_vm.$auth.user().name))]),
+              _vm._v(" "),
               _c(
                 "a",
                 {
@@ -23834,7 +23831,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("Logout")]
+                [_vm._v("Выйти")]
               )
             ])
           : _vm._e()
@@ -23865,7 +23862,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
+  return _c("div", { staticClass: "content" }, [
     _c(
       "div",
       {
@@ -23877,6 +23874,7 @@ var render = function() {
             expression: "loadMore"
           }
         ],
+        staticClass: "card",
         attrs: {
           "infinite-scroll-disabled": "busy",
           "infinite-scroll-distance": "10",
@@ -23884,86 +23882,79 @@ var render = function() {
         }
       },
       [
-        _c("div", { staticClass: "card-deck mt-5" }, [
-          _c(
+        _vm._l(_vm.getNews, function(element) {
+          return _c(
             "div",
-            { staticClass: "row" },
+            { staticClass: "card-item" },
             [
-              _vm._l(_vm.getNews, function(element) {
-                return _c(
-                  "div",
-                  { staticClass: "card" },
-                  [
-                    _c(
-                      "router-link",
-                      { attrs: { to: "/show/" + element.id } },
-                      [
-                        element.title_image
-                          ? _c("img", {
-                              staticClass: "card-img-top img-fluid",
-                              attrs: {
-                                src: _vm.getImgUrl(element.title_image),
-                                alt: "Card image cap"
-                              }
-                            })
-                          : _vm._e()
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "card-body" },
-                      [
-                        _c(
-                          "router-link",
-                          { attrs: { to: "/show/" + element.id } },
-                          [
-                            _c("h5", {
-                              staticClass: "card-title",
-                              domProps: { innerHTML: _vm._s(element.title) }
-                            }),
-                            _vm._v(" "),
-                            _c("p", {
-                              staticClass: "card-text",
-                              domProps: {
-                                innerHTML: _vm._s(
-                                  _vm.getDescription(element.description)
-                                )
-                              }
-                            })
-                          ]
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "card-footer" }, [
-                      _c("small", { staticClass: "text-muted" }, [
-                        _vm._v(_vm._s(element.public_date))
-                      ])
-                    ])
-                  ],
-                  1
-                )
-              }),
+              _c("router-link", { attrs: { to: "/show/" + element.id } }, [
+                element.title_image
+                  ? _c("img", {
+                      staticClass: "card-img-top img-fluid",
+                      attrs: {
+                        src: _vm.getImgUrl(element.title_image),
+                        alt: "Card image cap"
+                      }
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                !element.title_image
+                  ? _c("img", {
+                      staticClass: "card-img-top img-fluid",
+                      staticStyle: { "margin-left": "-22%" },
+                      attrs: {
+                        src: "/images/news/default_img.svg",
+                        alt: "Card image cap"
+                      }
+                    })
+                  : _vm._e()
+              ]),
               _vm._v(" "),
               _c(
                 "div",
-                {
-                  staticClass: "preloader-block",
-                  class: {
-                    show: _vm.preloader,
-                    fade: !_vm.preloader,
-                    last: _vm.endNews
-                  }
-                },
-                [_vm._m(0)]
+                { staticClass: "card-body" },
+                [
+                  _c("small", { staticClass: "card-date" }, [
+                    _vm._v(_vm._s(element.public_date))
+                  ]),
+                  _vm._v(" "),
+                  _c("router-link", { attrs: { to: "/show/" + element.id } }, [
+                    _c("h5", {
+                      staticClass: "card-title",
+                      domProps: { innerHTML: _vm._s(element.title) }
+                    }),
+                    _vm._v(" "),
+                    _c("p", {
+                      staticClass: "card-text",
+                      domProps: {
+                        innerHTML: _vm._s(
+                          _vm.getDescription(element.description)
+                        )
+                      }
+                    })
+                  ])
+                ],
+                1
               )
             ],
-            2
+            1
           )
-        ])
-      ]
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "preloader-block",
+            class: {
+              show: _vm.preloader,
+              fade: !_vm.preloader,
+              last: _vm.endNews
+            }
+          },
+          [_vm._m(0)]
+        )
+      ],
+      2
     )
   ])
 }
@@ -24005,8 +23996,10 @@ var render = function() {
     [
       _c(
         "nav",
-        { staticClass: "navbar navbar-dark bg-black justify-content-center" },
+        { staticClass: "navbar navbar-dark" },
         [
+          _c("div", { staticClass: "nav-left" }),
+          _vm._v(" "),
           _c(
             "router-link",
             {
@@ -24020,30 +24013,30 @@ var render = function() {
             "div",
             { staticClass: "nav-favorite" },
             [
-              _c(
-                "svg",
-                {
-                  attrs: {
-                    width: "24",
-                    height: "24",
-                    viewBox: "0 0 24 24",
-                    fill: "none",
-                    xmlns: "http://www.w3.org/2000/svg"
-                  }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      d:
-                        "M19 18L21 19V3C21 1.9 20.1 1 19 1H8.99C7.89 1 7 1.9 7 3H17C18.1 3 19 3.9 19 5V18ZM15 5H5C3.9 5 3 5.9 3 7V23L10 20L17 23V7C17 5.9 16.1 5 15 5Z",
-                      fill: "#E1E1E1"
-                    }
-                  })
-                ]
-              ),
-              _vm._v(" "),
               _c("router-link", { attrs: { to: { name: "favorites" } } }, [
-                _vm._v("\n                    Избранное\n                ")
+                _c(
+                  "svg",
+                  {
+                    attrs: {
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 24 24",
+                      fill: "none",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M19 18L21 19V3C21 1.9 20.1 1 19 1H8.99C7.89 1 7 1.9 7 3H17C18.1 3 19 3.9 19 5V18ZM15 5H5C3.9 5 3 5.9 3 7V23L10 20L17 23V7C17 5.9 16.1 5 15 5Z",
+                        fill: "#E1E1E1"
+                      }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("span", [_vm._v("Избранное")])
               ])
             ],
             1
@@ -24081,7 +24074,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
+  return _c("div", { staticClass: "content" }, [
     _c(
       "div",
       {
@@ -24093,6 +24086,7 @@ var render = function() {
             expression: "loadMore"
           }
         ],
+        staticClass: "card",
         attrs: {
           "infinite-scroll-disabled": "busy",
           "infinite-scroll-distance": "10",
@@ -24100,86 +24094,79 @@ var render = function() {
         }
       },
       [
-        _c("div", { staticClass: "card-deck mt-5" }, [
-          _c(
+        _vm._l(_vm.getNews, function(element) {
+          return _c(
             "div",
-            { staticClass: "row" },
+            { staticClass: "card-item" },
             [
-              _vm._l(_vm.getNews, function(element) {
-                return _c(
-                  "div",
-                  { staticClass: "card" },
-                  [
-                    _c(
-                      "router-link",
-                      { attrs: { to: "/show/" + element.id } },
-                      [
-                        element.title_image
-                          ? _c("img", {
-                              staticClass: "card-img-top img-fluid",
-                              attrs: {
-                                src: _vm.getImgUrl(element.title_image),
-                                alt: "Card image cap"
-                              }
-                            })
-                          : _vm._e()
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "card-body" },
-                      [
-                        _c(
-                          "router-link",
-                          { attrs: { to: "/show/" + element.id } },
-                          [
-                            _c("h5", {
-                              staticClass: "card-title",
-                              domProps: { innerHTML: _vm._s(element.title) }
-                            }),
-                            _vm._v(" "),
-                            _c("p", {
-                              staticClass: "card-text",
-                              domProps: {
-                                innerHTML: _vm._s(
-                                  _vm.getDescription(element.description)
-                                )
-                              }
-                            })
-                          ]
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "card-footer" }, [
-                      _c("small", { staticClass: "text-muted" }, [
-                        _vm._v(_vm._s(element.public_date))
-                      ])
-                    ])
-                  ],
-                  1
-                )
-              }),
+              _c("router-link", { attrs: { to: "/show/" + element.id } }, [
+                element.title_image
+                  ? _c("img", {
+                      staticClass: "card-img-top img-fluid",
+                      attrs: {
+                        src: _vm.getImgUrl(element.title_image),
+                        alt: "Card image cap"
+                      }
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                !element.title_image
+                  ? _c("img", {
+                      staticClass: "card-img-top img-fluid",
+                      staticStyle: { "margin-left": "-22%" },
+                      attrs: {
+                        src: "/images/news/default_img.svg",
+                        alt: "Card image cap"
+                      }
+                    })
+                  : _vm._e()
+              ]),
               _vm._v(" "),
               _c(
                 "div",
-                {
-                  staticClass: "preloader-block",
-                  class: {
-                    show: _vm.preloader,
-                    fade: !_vm.preloader,
-                    last: _vm.endNews
-                  }
-                },
-                [_vm._m(0)]
+                { staticClass: "card-body" },
+                [
+                  _c("small", { staticClass: "card-date" }, [
+                    _vm._v(_vm._s(element.public_date))
+                  ]),
+                  _vm._v(" "),
+                  _c("router-link", { attrs: { to: "/show/" + element.id } }, [
+                    _c("h5", {
+                      staticClass: "card-title",
+                      domProps: { innerHTML: _vm._s(element.title) }
+                    }),
+                    _vm._v(" "),
+                    _c("p", {
+                      staticClass: "card-text",
+                      domProps: {
+                        innerHTML: _vm._s(
+                          _vm.getDescription(element.description)
+                        )
+                      }
+                    })
+                  ])
+                ],
+                1
               )
             ],
-            2
+            1
           )
-        ])
-      ]
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "preloader-block",
+            class: {
+              show: _vm.preloader,
+              fade: !_vm.preloader,
+              last: _vm.endNews
+            }
+          },
+          [_vm._m(0)]
+        )
+      ],
+      2
     )
   ])
 }
@@ -24216,7 +24203,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_c("CardNews")], 1)
+  return _c("CardNews")
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -24281,6 +24268,7 @@ var render = function() {
                 ],
                 staticClass: "form-control",
                 attrs: {
+                  name: "email",
                   type: "email",
                   id: "email",
                   placeholder: "user@example.com",
@@ -24313,7 +24301,12 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { type: "password", id: "password", required: "" },
+                attrs: {
+                  name: "password",
+                  type: "password",
+                  id: "password",
+                  required: ""
+                },
                 domProps: { value: _vm.password },
                 on: {
                   input: function($event) {
@@ -24587,135 +24580,183 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "row mt-3 pb-3" }, [
-      _c("div", { staticClass: "col-12" }, [
-        _c("h4", [
-          _c(
-            "button",
-            {
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.handleBack()
-                }
-              }
-            },
-            [_vm._v("<-")]
-          ),
-          _vm._v(" " + _vm._s(_vm.showNews.title))
-        ]),
-        _vm._v(" "),
-        _c("p", { staticClass: "text-center" }, [
-          _vm.showNews.title_image
-            ? _c("img", {
-                staticClass: "img-fluid",
-                attrs: {
-                  src: "/images/news/preview/" + _vm.showNews.title_image,
-                  alt: "Card image cap"
-                }
-              })
-            : _vm._e()
-        ]),
-        _vm._v(" "),
-        _c("p", { domProps: { innerHTML: _vm._s(_vm.showNews.description) } }),
-        _vm._v(" "),
-        _vm.showNews.news_channel
-          ? _c(
-              "a",
-              {
-                staticClass: "btn btn-dark bg-black w-100",
-                attrs: { href: _vm.showNews.news_url, target: "_blank" }
-              },
-              [_vm._v("Читать на " + _vm._s(_vm.showNews.news_channel.name))]
-            )
-          : _vm._e()
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12" }, [
+  return _c("div", { staticClass: "content" }, [
+    _c("div", { staticClass: "show-news-date" }, [
+      _c("div", { staticClass: "news-back-mobile" }, [
         _c(
-          "div",
+          "svg",
           {
-            staticClass: "favorites",
-            class: { active: _vm.inFavorites },
-            on: { click: _vm.addFavorites }
+            staticClass: "back-button",
+            attrs: {
+              width: "35",
+              height: "35",
+              viewBox: "0 0 35 35",
+              fill: "none",
+              xmlns: "http://www.w3.org/2000/svg"
+            },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.handleBack()
+              }
+            }
           },
           [
-            _c(
-              "svg",
-              {
-                attrs: {
-                  width: "20",
-                  height: "20",
-                  viewBox: "0 0 20 20",
-                  fill: "none",
-                  xmlns: "http://www.w3.org/2000/svg"
-                }
-              },
-              [
-                _c("path", {
-                  staticClass: "favorites-path",
-                  attrs: {
-                    d:
-                      "M14.1666 2.5H5.83329C4.91663 2.5 4.17496 3.25 4.17496 4.16667L4.16663 17.5L9.99996 15L15.8333 17.5V4.16667C15.8333 3.25 15.0833 2.5 14.1666 2.5ZM14.1666 15L9.99996 13.1833L5.83329 15V4.16667H14.1666V15Z",
-                    fill: "#4D4D4D"
-                  }
-                })
-              ]
-            ),
-            _vm._v("\n                    В избранное\n                ")
+            _c("path", {
+              attrs: {
+                d:
+                  "M29.1666 16.0416H11.4187L19.5708 7.88956L17.5 5.83331L5.83331 17.5L17.5 29.1666L19.5562 27.1104L11.4187 18.9583H29.1666V16.0416Z",
+                fill: "#111111"
+              }
+            })
           ]
         )
+      ]),
+      _vm._v(" "),
+      _c("span", { staticClass: "card-date" }, [
+        _vm._v(" " + _vm._s(_vm.showNews.public_date) + " ")
       ])
     ]),
     _vm._v(" "),
-    _vm.$auth.check(2)
-      ? _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "text-center w-100" }, [
-            _c(
-              "a",
-              {
-                attrs: {
-                  href:
-                    "/images/news/generated/" + _vm.showNews.generated_image,
-                  download: ""
-                }
-              },
-              [_vm._v("Скачать сгенерированную картинку")]
-            )
-          ]),
+    _c("div", { staticClass: "show-news" }, [
+      _c("div", { staticClass: "news-back-desktop" }, [
+        _c(
+          "svg",
+          {
+            staticClass: "back-button",
+            attrs: {
+              width: "35",
+              height: "35",
+              viewBox: "0 0 35 35",
+              fill: "none",
+              xmlns: "http://www.w3.org/2000/svg"
+            },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.handleBack()
+              }
+            }
+          },
+          [
+            _c("path", {
+              attrs: {
+                d:
+                  "M29.1666 16.0416H11.4187L19.5708 7.88956L17.5 5.83331L5.83331 17.5L17.5 29.1666L19.5562 27.1104L11.4187 18.9583H29.1666V16.0416Z",
+                fill: "#111111"
+              }
+            })
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "news-content" }, [
+        _c("div", { staticClass: "news-content__first" }, [
+          _c("h4", { staticClass: "news-title" }, [
+            _vm._v(_vm._s(_vm.showNews.title))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "news-content__second" }, [
+          _c("p", {
+            staticClass: "news-description",
+            domProps: { innerHTML: _vm._s(_vm.showNews.description) }
+          }),
           _vm._v(" "),
-          _c("div", { staticClass: "mt-5 pb-5" }, [
-            _c("label", [
-              _vm._v("File\n                    "),
-              _c("input", {
-                ref: "file",
-                attrs: { type: "file", id: "file" },
-                on: {
-                  change: function($event) {
-                    return _vm.handleFileUpload()
+          _c("div", { staticClass: "read-button" }, [
+            _vm.showNews.news_channel
+              ? _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-dark",
+                    attrs: { href: _vm.showNews.news_url, target: "_blank" }
+                  },
+                  [
+                    _vm._v(
+                      "Читать на " + _vm._s(_vm.showNews.news_channel.name)
+                    )
+                  ]
+                )
+              : _vm._e()
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "news-content__third" }, [
+          _c("div", { staticClass: "news-gallery" }, [
+            _vm.showNews.title_image
+              ? _c("img", {
+                  staticClass: "img-fluid",
+                  attrs: {
+                    src: "/images/news/preview/" + _vm.showNews.title_image,
+                    alt: "Card image cap"
                   }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-bold btn-success img-save",
-                on: {
-                  click: function($event) {
-                    return _vm.submitFile()
-                  }
-                }
-              },
-              [_vm._v("Сохранить")]
-            )
+                })
+              : _vm._e()
           ])
         ])
-      : _vm._e()
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "news-footer" }, [
+      _c(
+        "div",
+        {
+          staticClass: "favorites",
+          class: { active: _vm.inFavorites },
+          on: { click: _vm.addFavorites }
+        },
+        [
+          _c(
+            "svg",
+            {
+              attrs: {
+                width: "20",
+                height: "20",
+                viewBox: "0 0 20 20",
+                fill: "none",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _c("path", {
+                staticClass: "favorites-path",
+                attrs: {
+                  d:
+                    "M14.1666 2.5H5.83329C4.91663 2.5 4.17496 3.25 4.17496 4.16667L4.16663 17.5L9.99996 15L15.8333 17.5V4.16667C15.8333 3.25 15.0833 2.5 14.1666 2.5ZM14.1666 15L9.99996 13.1833L5.83329 15V4.16667H14.1666V15Z",
+                  fill: "#4D4D4D"
+                }
+              })
+            ]
+          ),
+          _vm._v("\n                В избранное\n            ")
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "share" }, [
+        _c(
+          "svg",
+          {
+            attrs: {
+              width: "20",
+              height: "20",
+              viewBox: "0 0 20 20",
+              fill: "none",
+              xmlns: "http://www.w3.org/2000/svg"
+            }
+          },
+          [
+            _c("path", {
+              attrs: {
+                d:
+                  "M15 13.4C14.3667 13.4 13.8 13.65 13.3667 14.0416L7.425 10.5833C7.46667 10.3916 7.5 10.2 7.5 9.99996C7.5 9.79996 7.46667 9.60829 7.425 9.41663L13.3 5.99163C13.75 6.40829 14.3417 6.66663 15 6.66663C16.3833 6.66663 17.5 5.54996 17.5 4.16663C17.5 2.78329 16.3833 1.66663 15 1.66663C13.6167 1.66663 12.5 2.78329 12.5 4.16663C12.5 4.36663 12.5333 4.55829 12.575 4.74996L6.7 8.17496C6.25 7.75829 5.65833 7.49996 5 7.49996C3.61667 7.49996 2.5 8.61663 2.5 9.99996C2.5 11.3833 3.61667 12.5 5 12.5C5.65833 12.5 6.25 12.2416 6.7 11.825L12.6333 15.2916C12.5917 15.4666 12.5667 15.65 12.5667 15.8333C12.5667 17.175 13.6583 18.2666 15 18.2666C16.3417 18.2666 17.4333 17.175 17.4333 15.8333C17.4333 14.4916 16.3417 13.4 15 13.4Z",
+                fill: "#4D4D4D"
+              }
+            })
+          ]
+        ),
+        _vm._v("\n                Поделиться\n            ")
+      ])
+    ])
   ])
 }
 var staticRenderFns = []

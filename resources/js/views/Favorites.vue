@@ -1,34 +1,31 @@
 <template>
-    <div class="container">
-        <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" infinite-scroll-immediate-check="true">
-            <div class="card-deck mt-5">
-                <div class="row">
-                    <div class="card" v-for="element in getNews">
-                        <router-link :to="'/show/'+element.id">
-                            <img :src="getImgUrl(element.title_image)" alt="Card image cap" class="card-img-top img-fluid" v-if="element.title_image">
-                        </router-link>
-                        <div class="card-body">
-                            <router-link :to="'/show/'+element.id">
-                                <h5 class="card-title" v-html="element.title"></h5>
-                                <p class="card-text" v-html="getDescription(element.description)"></p>
-                            </router-link>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">{{ element.public_date }}</small>
-                        </div>
-                    </div>
-                    <div class="preloader-block" :class="{'show': preloader, 'fade': !preloader, 'last': endNews}">
-                        <div class="preloader">
-                            <div class="preloader-content">
-                                <div class="spinner-border" role="status">
+    <div class="content">
+        <div v-infinite-scroll="loadMore"
+             infinite-scroll-disabled="busy"
+             infinite-scroll-distance="10"
+             infinite-scroll-immediate-check="true" class="card">
+            <div class="card-item" v-for="element in getNews">
+                <router-link :to="'/show/'+element.id">
+                    <img :src="getImgUrl(element.title_image)" alt="Card image cap" class="card-img-top img-fluid" v-if="element.title_image">
+                    <img src="/images/news/default_img.svg" alt="Card image cap" class="card-img-top img-fluid" v-if="!element.title_image" style="margin-left: -22%;">
+                </router-link>
+                <div class="card-body">
+                    <small class="card-date">{{ element.public_date }}</small>
+                    <router-link :to="'/show/'+element.id">
+                        <h5 class="card-title" v-html="element.title"></h5>
+                        <p class="card-text" v-html="getDescription(element.description)"></p>
+                    </router-link>
+                </div>
+            </div>
+            <div class="preloader-block" :class="{'show': preloader, 'fade': !preloader, 'last': endNews}">
+                <div class="preloader">
+                    <div class="preloader-content">
+                        <div class="spinner-border" role="status">
 
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </template>

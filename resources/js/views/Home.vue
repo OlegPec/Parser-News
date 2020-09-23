@@ -1,8 +1,8 @@
 <template>
-    <div>
+<!--    <div>-->
         <CardNews></CardNews>
 <!--        {{someUnrelatedVar}}-->
-    </div>
+<!--    </div>-->
 </template>
 
 <script>

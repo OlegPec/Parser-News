@@ -1,30 +1,31 @@
 <template>
-    <nav id="nav">
+    <div class="nav-auth">
         <ul>
-            <!--UNLOGGED-->
-            <li v-if="!$auth.check()" v-for="(route, key) in routes.unlogged" v-bind:key="route.path">
-                <router-link  :to="{ name : route.path }" :key="key">
-                    {{route.name}}
-                </router-link>
-            </li>
             <!--LOGGED USER-->
             <li v-if="$auth.check(1)" v-for="(route, key) in routes.user" v-bind:key="route.path">
                 <router-link  :to="{ name : route.path }" :key="key">
                     {{route.name}}
                 </router-link>
             </li>
-            <!--LOGGED ADMIN-->
-            <li v-if="$auth.check(2)" v-for="(route, key) in routes.admin" v-bind:key="route.path">
+            <!--UNLOGGED-->
+            <li v-if="!$auth.check()" v-for="(route, key) in routes.unlogged" v-bind:key="route.path">
                 <router-link  :to="{ name : route.path }" :key="key">
                     {{route.name}}
                 </router-link>
             </li>
+            <!--LOGGED ADMIN-->
+            <!--<li v-if="$auth.check(2)" v-for="(route, key) in routes.admin" v-bind:key="route.path">
+                <router-link  :to="{ name : route.path }" :key="key">
+                    {{route.name}}
+                </router-link>
+            </li>-->
             <!--LOGOUT-->
             <li v-if="$auth.check()">
-                <a href="#" @click.prevent="$auth.logout()">Logout</a>
+                <span>Привет {{ $auth.user().name }}</span>
+                <a href="#" @click.prevent="$auth.logout()">Выйти</a>
             </li>
         </ul>
-    </nav>
+    </div>
 </template>
 <script>
     export default {
@@ -34,15 +35,15 @@
                     // UNLOGGED
                     unlogged: [
                         {
-                            name: 'Inscription',
-                            path: 'register'
+                            name: 'Авторизация',
+                            path: 'login'
                         },
                         {
-                            name: 'Connexion',
-                            path: 'login'
-                        }
+                            name: 'Регистрация',
+                            path: 'register'
+                        },
                     ],
-                    // LOGGED USER
+                    /*// LOGGED USER
                     user: [
                         {
                             name: 'Dashboard',
@@ -55,7 +56,7 @@
                             name: 'Admin Dashboard',
                             path: 'admin.dashboard'
                         }
-                    ]
+                    ]*/
                 }
             }
         },
