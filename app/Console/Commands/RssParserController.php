@@ -121,7 +121,7 @@ class RssParserController extends Command
                 }
         }
 //        $rss = simplexml_load_file($url);
-        dd('dfgdfgh');
+        dd('complete');
     }
 
     function removeEmojis( $string ) {
