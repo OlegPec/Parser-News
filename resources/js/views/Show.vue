@@ -56,7 +56,7 @@
         </div>
 
 
-        <!--<div class="row" v-if="$auth.check(2)">
+        <div class="row" v-if="$auth.check(2)">
             <div class="text-center w-100">
                 <a :href="'/images/news/generated/'+showNews.generated_image" download>Скачать сгенерированную картинку</a>
             </div>
@@ -66,7 +66,7 @@
                 </label>
                 <button class="btn btn-bold btn-success img-save" v-on:click="submitFile()">Сохранить</button>
             </div>
-        </div>-->
+        </div>
     </div>
 </template>
 
